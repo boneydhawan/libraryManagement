@@ -90,22 +90,29 @@ public class MainServiceImpl implements MainService{
     }
     
     public List<BookDetailBean> getBookDetails(){
-    	String q="SELECT b,(quantity - (select count(id) from BookIssued where bookDetail=id)) as booksQuantityLeft FROM BookDetail b where isDelete=0";
+    	String q="SELECT b FROM BookDetail b where isDelete=0";
     	List<BookDetailBean> bookDetailBeanList = new ArrayList<BookDetailBean>();
 		List<BookDetail> bookDetail =  (List<BookDetail>) commonDao.executeNativeQuery(q);
-		for(BookDetail s:bookDetail){  
-			 System.out.println(s.getQuantity());  
-			 System.out.println(s.getBooksQuantityLeft());  
-			}  
+		String query="select p from BookIssued p";
+		List<BookIssued> bookIssuedList =  (List<BookIssued>) commonDao.executeNativeQuery(query);
+		
 		for(BookDetail books : bookDetail){
 			BookDetailBean bookDetailList = new BookDetailBean();
+			int bookCount=0;
 			bookDetailList.setId(books.getId());
 			bookDetailList.setQuantity(books.getQuantity());
 			bookDetailList.setBookName(books.getBookName());
 			bookDetailList.setAuthorName(books.getAuthor());
 			bookDetailList.setBookCategory(books.getBookCategory());
 			bookDetailList.setBookDetail(books.getBookDetail());
-			bookDetailList.setBooksQuantityLeft(books.getBooksQuantityLeft());
+			
+			for(BookIssued bookIssued : bookIssuedList){
+				if(bookIssued.getBookDetail().getId() == books.getId()){
+					bookCount++;
+				}
+			}
+			int finalBookQuantityLeft=(books.getQuantity() - bookCount);
+			bookDetailList.setBooksQuantityLeft(finalBookQuantityLeft);
 			bookDetailBeanList.add(bookDetailList);
 			
 		}

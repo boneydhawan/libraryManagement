@@ -29,14 +29,6 @@ public class BookDetail {
 	@ManyToOne
     @JoinColumn(name = "book_category_id")
     private BookCategory bookCategory;
-	
-	public int getBooksQuantityLeft() {
-		return booksQuantityLeft;
-	}
-
-	public void setBooksQuantityLeft(int booksQuantityLeft) {
-		this.booksQuantityLeft = booksQuantityLeft;
-	}
 
 	@Column(name = "quantity")
     private int quantity;
@@ -44,9 +36,7 @@ public class BookDetail {
 	@Column(name = "is_Delete")
     private Long isDelete;
 	
-	@Transient
-    private int booksQuantityLeft;
-	
+
 
 	public Long getIsDelete() {
 		return isDelete;

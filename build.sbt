@@ -17,7 +17,7 @@ libraryDependencies ++= Seq(
     filters
 )
 
-
+enablePlugins(JavaAppPackaging)
 fork in run := false
 
 
